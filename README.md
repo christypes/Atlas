@@ -10,20 +10,24 @@
 - **Security**: Rate limiting, JWT authentication, and DDoS protection.
 
 ## Tech Stack
+<!--
 ### Frontend
 - **Framework**: React
 - **State Management**: Redux
 - **Styling**: Tailwind CSS
 - **Deployment**: Vercel
+-->
 
 ### Backend
-- **Language**: Go (Gin/Fiber) or Java (Spring Boot)
-- **Database**: PostgreSQL, Cassandra/ScyllaDB
+- **Language**: Go (Gin)
+- **Database**: PostgreSQL
+<!--
 - **Caching**: Redis
 - **Messaging**: Kafka
 - **API**: REST + gRPC
 - **Deployment**: Docker + Kubernetes
 - **Monitoring**: Prometheus + Grafana
+-->
 
 ## Getting Started
 1. Clone the repo:
