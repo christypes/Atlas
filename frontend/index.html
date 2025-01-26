@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas URL Shortener</title>
+    <style>
+      /* Basic Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f3f4f6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        color: #1e40af;
+        margin-bottom: 1.5rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        font-size: 1rem;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      button {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #3b82f6;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #2563eb;
+      }
+
+      .result {
+        margin-top: 1.5rem;
+        font-size: 1rem;
+        color: #374151;
+      }
+
+      .result a {
+        color: #3b82f6;
+        text-decoration: none;
+      }
+
+      .result a:hover {
+        text-decoration: underline;
+      }
+
+      .error {
+        color: #dc2626;
+        margin-top: 1rem;
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Atlas URL Shortener</h1>
+      <form id="shortenForm">
+        <input
+          type="text"
+          id="originalUrl"
+          placeholder="Enter your URL"
+          required
+        />
+        <input
+          type="text"
+          id="satiPath"
+          placeholder="Enter custom path"
+          required
+        />
+        <button type="submit">Shorten URL</button>
+      </form>
+      <div class="result" id="result"></div>
+      <div class="error" id="error"></div>
+    </div>
+
+    <script>
+      const form = document.getElementById("shortenForm");
+      const resultDiv = document.getElementById("result");
+      const errorDiv = document.getElementById("error");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const originalUrl = document.getElementById("originalUrl").value;
+        const satiPath = document.getElementById("satiPath").value;
+
+        try {
+          const response = await fetch("http://localhost:8080/shorten", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              original_url: originalUrl,
+              sati_path: satiPath,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            resultDiv.innerHTML = `
+              <p>Your short URL:</p>
+              <a href="${data.sati_path}" target="_blank">${data.sati_path}</a>
+            `;
+            errorDiv.textContent = "";
+          } else {
+            errorDiv.textContent = data.error || "An error occurred";
+            resultDiv.innerHTML = "";
+          }
+        } catch (err) {
+          errorDiv.textContent = "Failed to connect to the server";
+          resultDiv.innerHTML = "";
+        }
+      });
+    </script>
+  </body>
+</html>
